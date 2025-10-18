@@ -5,7 +5,11 @@
 
 int main(){
 
-    Matrix test(3, 2);
+    LinAlg::Matrix a(30, 20);
+    LinAlg::Matrix b(20, 30);
 
-    test.print();
+    a.randomInitialise();
+    b.randomInitialise();
+
+    LinAlg::mat_mult(a, b).print();
 }
