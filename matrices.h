@@ -3,7 +3,6 @@
 #include <vector>
 
 
-namespace LinAlg {
 class Matrix {
 public:
     Matrix(std::size_t rows, std::size_t cols)
@@ -16,13 +15,15 @@ public:
     void randomInitialise();
     std::size_t nRows() const;
     std::size_t nCols() const;
+    Matrix transpose() const;
+    
 private:
     std::size_t rows_;
     std::size_t cols_;
     std::vector<double> data_;
 };
 
-
+namespace LinAlg {
 Matrix mat_mult(const Matrix& lhs, const Matrix& rhs);
-
+Matrix randomMatrix(const std::size_t rows, const std::size_t cols);
 }

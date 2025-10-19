@@ -5,11 +5,13 @@
 
 int main(){
 
-    LinAlg::Matrix a(30, 20);
-    LinAlg::Matrix b(20, 30);
+    Matrix a = LinAlg::randomMatrix(3, 3);
+    Matrix b = a.transpose();
+    Matrix c = LinAlg::mat_mult(a, b);
 
-    a.randomInitialise();
-    b.randomInitialise();
+    std::cout << "Hello world!";
+    // a.print();
+    // b.print();
+    c.print();
 
-    LinAlg::mat_mult(a, b).print();
 }

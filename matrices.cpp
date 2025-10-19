@@ -3,7 +3,7 @@
 #include <random>
 #include "matrices.h"
 
-double& LinAlg::Matrix::set(std::size_t row, std::size_t col) {
+double& Matrix::set(std::size_t row, std::size_t col) {
 
     // This function returns a reference so that it does not over-ride the 
     // main object with the new data, but rather changes the object in place.
@@ -14,7 +14,7 @@ double& LinAlg::Matrix::set(std::size_t row, std::size_t col) {
     return data_[row * cols_ + col];
 }
 
-const double& LinAlg::Matrix::at(std::size_t row, std::size_t col) const {
+const double& Matrix::at(std::size_t row, std::size_t col) const {
 
     // since this function returns a const - this means that the value 
     // that is returned cannot be modified through the reference it returns.
@@ -32,7 +32,7 @@ const double& LinAlg::Matrix::at(std::size_t row, std::size_t col) const {
     return data_[row * cols_ + col];
 }
 
-LinAlg::Matrix LinAlg::Matrix::shape() const {
+Matrix Matrix::shape() const {
     // Returnst the shape of the matrix in a 2x1 format
     Matrix dims(2, 1);
 
@@ -42,7 +42,7 @@ LinAlg::Matrix LinAlg::Matrix::shape() const {
     return dims;
 }
 
-void LinAlg::Matrix::print() const {
+void Matrix::print() const {
 
     const std::size_t rows = nRows();
     const std::size_t cols = nCols();
@@ -61,7 +61,7 @@ void LinAlg::Matrix::print() const {
 
 };
 
-void LinAlg::Matrix::randomInitialise(){
+void Matrix::randomInitialise(){
 
     // Randomly initialises the matrix with random float between 0, 1.
 
@@ -75,17 +75,33 @@ void LinAlg::Matrix::randomInitialise(){
     }
 }
 
-std::size_t LinAlg::Matrix::nRows() const {
+Matrix Matrix::transpose() const {
+
+    const std::size_t rows = nRows();
+    const std::size_t cols = nCols();
+
+    Matrix transposedMatrix(cols, rows);
+
+    for (std::size_t col = 0; col < cols; col++){
+        for (std::size_t row = 0; row < rows; row++){
+            transposedMatrix.set(col, row) = at(row, col); // flipping the signs.
+        };
+    };
+
+    return transposedMatrix;
+}
+
+std::size_t Matrix::nRows() const {
     return rows_;
 }
 
-std::size_t LinAlg::Matrix::nCols() const {
+std::size_t Matrix::nCols() const {
     return cols_;
 }
 
-LinAlg::Matrix LinAlg::mat_mult(
-    const LinAlg::Matrix& lhs, 
-    const LinAlg::Matrix& rhs
+Matrix LinAlg::mat_mult(
+    const Matrix& lhs, 
+    const Matrix& rhs
 ) {
 
     // we do not return a reference in this case because the "result" that we are
@@ -97,7 +113,7 @@ LinAlg::Matrix LinAlg::mat_mult(
     if (lhs.nCols() != rhs.nRows()) {
         throw std::invalid_argument("mat_mult dimension mismatch");
     }
-    LinAlg::Matrix result(lhs.nRows(), rhs.nCols());
+    Matrix result(lhs.nRows(), rhs.nCols());
     for (std::size_t row = 0; row < lhs.nRows(); ++row) {
         for (std::size_t col = 0; col < rhs.nCols(); ++col) {
             double sum = 0.0;
@@ -109,3 +125,19 @@ LinAlg::Matrix LinAlg::mat_mult(
     }
     return result;
 }
+
+Matrix LinAlg::randomMatrix(const std::size_t rows, const std::size_t cols){
+    
+    // Returns an instance of a random matrix with entries between 0 and 1
+ 
+    if (rows == 0 || cols == 0){
+        throw std::invalid_argument("Both rows and columns cannot be zero!");
+    }
+
+    Matrix _Mat(rows, cols);
+    _Mat.randomInitialise();
+
+    return _Mat;
+
+}
+
